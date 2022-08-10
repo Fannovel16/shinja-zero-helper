@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model BotEmail {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  address   String   @unique
+  password  String
+  createdAt DateTime
+  creator   Json
+
+  botAccounts BotAccount[]
+}
+
+model BotAccount {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  username   String
+  password   String
+  birthday   String
+  createdAt  DateTime
+  usageDates DateTime[]
+  creator    Json
+
+  site   Site   @relation(fields: [siteId], references: [id])
+  siteId String @db.ObjectId
+
+  email   BotEmail @relation(fields: [emailId], references: [id])
+  emailId String   @db.ObjectId
+  //compound/composite unique constraint, tạm dịch: tổ hợp ràng buộc duy nhất (?)
+  //https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#unique-1
+
+  @@unique([siteId, emailId])
+}
+
+model Site {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique
+  botAccounts BotAccount[]
+}
+
+model ProxyUsage {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  name      String        @unique
+  serverIDs String[]      @db.ObjectId
+  servers   ProxyServer[] @relation(fields: [serverIDs], references: [id])
+}
+
+model ProxyServer {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  ip String @unique
+
+  port     Int
+  protocol String
+  country  String?
+  username String
+  password String
+
+  usageIDs String[]     @db.ObjectId
+  usages  ProxyUsage[] @relation(fields: [usageIDs], references: [id])
+}

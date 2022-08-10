@@ -1,0 +1,32 @@
+{
+	"name": "shinja-zero-helper",
+	"version": "1.0.0-preview",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"package": "svelte-kit package",
+		"preview": "vite preview",
+		"vercel-build": "prisma generate && vite build",
+		"prisma:generate": "prisma generate"
+	},
+	"devDependencies": {
+		"@mermaid-js/mermaid-cli": "^9.1.4",
+		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/kit": "next",
+		"prisma-erd-generator": "^1.0.2",
+		"svelte": "^3.44.0",
+		"sveltestrap": "github:ClapClap-app/sveltestrap",
+		"vite": "^3.0.0",
+		"prisma": "4.2.0"
+	},
+	"type": "module",
+	"dependencies": {
+		"ajv": "^8.11.0",
+		"ajv-formats": "^2.1.1",
+		"axios": "^0.27.2",
+		"dayjs": "^1.11.4",
+		"exceljs": "^4.3.0",
+		"prisma-docs-generator": "^0.5.0",
+		"@prisma/client": "4.2.0"
+	}
+}
