@@ -3,21 +3,21 @@ export default {
         jsonError: e => ({
             status: 400,
             body: {
-                errorType: "JSON_PARSING_FAILED",
+                errorCode: "JSON_PARSING_FAILED",
                 detail: e.toString()
             }
         }),
         failAjv: validate => ({
             status: 400,
             body: {
-                errorType: "AJV_VALIDATION_FAILED",
+                errorCode: "AJV_VALIDATION_FAILED",
                 detail: validate.errors[0]
             }
         }),
         forbidden: () => ({
             status: 403,
             body: {
-                errorType: "INVALID_TOKEN",
+                errorCode: "INVALID_TOKEN",
                 detail: {
                     tokenName: "authToken",
                     message: "Your authToken is invalid, no access."
@@ -27,7 +27,7 @@ export default {
         badEncBic: () => ({
             status: 400,
             body: {
-                errorType: "INVALID_TOKEN",
+                errorCode: "INVALID_TOKEN",
                 detail: {
                     tokenName: "encBIC",
                     message: "Your encBIC is malformed, please check if you copied it correctly or authenticate again to recieve another one."
@@ -37,14 +37,14 @@ export default {
         internalError: e => ({
             status: 500,
             body: {
-                errorType: "INTERNAL_ERROR",
+                errorCode: "INTERNAL_ERROR",
                 detail: { message: e.toString() }
             }
         }),
         badPrismaQuery: e => ({
             status: 400,
             body: {
-                errorType: "INVALID_PRISMA_QUERY",
+                errorCode: "INVALID_PRISMA_QUERY",
                 detail: { message: e.toString() }
             }
         })
