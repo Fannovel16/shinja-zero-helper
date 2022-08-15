@@ -2,6 +2,10 @@ import accessAuth from "$lib/nodejs/accessAuth"
 import getStatistics from "./_getStatistics"
 import Excel from 'exceljs'
 
+import { data as templateB64 } from "$lib/assets/template.b64.json"
+const templateFile = Buffer.from(templateB64, "base64")
+//Do làm biêng xử lí cái filesystem của Serverless function nên t làm cách này
+
 function createCurrSheet(workbook, prototypeSheet, label) {
     /*Để copy worksheet thì tạo worksheet mới rồi gán thuộc tính model của worksheet gốc cho nó
     Lưu ý là cách này cũng sẽ copy tên từ worksheet cũ, 2 worksheet trùng tên với nhau, từ đó dẫn tới "xung đột tên"
@@ -63,7 +67,7 @@ function fillWorkbook(workbook, prototypeSheet, dataset) {
 
 async function createWorkbookFile(site) {
     let workbook = new Excel.Workbook()
-    await workbook.xlsx.readFile("static/template.xlsx") //Tks https://www.programonaut.com/how-to-create-a-sveltekit-image-upload-step-by-step/
+    await workbook.xlsx.load(templateFile)
     const prototypeSheet = workbook.worksheets[0]
 
     fillWorkbook(workbook, prototypeSheet, await getStatistics(site, prototypeSheet.name))

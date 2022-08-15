@@ -1,2 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-export default new PrismaClient().proxyServer
+const prisma = new PrismaClient()
+export default prisma.proxyServer
+export const proxyUsage = prisma.proxyUsage

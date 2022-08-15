@@ -31,7 +31,7 @@ export async function POST({ url, request }) {
     try {
         const botAccountInfo = await request.json()
         botAccountInfo.site = siteName
-        if (!botAccountValidate(botAccountInfo)) return returnError.json.badRequest(botAccountValidate)
+        if (!botAccountValidate(botAccountInfo)) return returnError.json.failAjv(botAccountValidate)
         const assignResult = assignCreator(botAccountInfo)
         if (!assignResult) return returnError.json.badEncBic()
 

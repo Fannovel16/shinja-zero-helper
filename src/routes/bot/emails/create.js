@@ -26,7 +26,7 @@ export async function POST({ request, url }) {
     if (!authResult.result) return authResult.error
     try {
         const botEmailInfo = await request.json()
-        if (!botEmailValidate(botEmailInfo)) return returnError.json.badRequest(botEmailValidate)
+        if (!botEmailValidate(botEmailInfo)) return returnError.json.failAjv(botEmailValidate)
 
         const assignResult = assignCreator(botEmailInfo)
         if (!assignResult) return returnError.json.badEncBic()

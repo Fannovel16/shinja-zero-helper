@@ -11,7 +11,7 @@ const requestValidate = new Ajv().compile({
 export async function POST({ request }) {
     try {
         const requestBody = await request.json()
-        if (!requestValidate(requestBody)) return returnError.json.badRequest(requestValidate)
+        if (!requestValidate(requestBody)) return returnError.json.failAjv(requestValidate)
         const bieliverInfo = decryptEncBic(requestBody.encBIC)
         if (!bieliverInfo) return { status: 200, body: { valid: false, bieliverInfo } }
         return { status: 200, body: { valid: true, bieliverInfo } }

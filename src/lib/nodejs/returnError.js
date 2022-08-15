@@ -1,6 +1,13 @@
 export default {
     json: {
-        badRequest: validate => ({
+        jsonError: e => ({
+            status: 400,
+            body: {
+                errorType: "JSON_PARSING_FAILED",
+                detail: e.toString()
+            }
+        }),
+        failAjv: validate => ({
             status: 400,
             body: {
                 errorType: "AJV_VALIDATION_FAILED",
@@ -43,7 +50,7 @@ export default {
         })
     },
     text: {
-        badRequest: validate => ({
+        failAjv: validate => ({
             status: 400,
             body: `Your input is invalid. Detail(s):${['', ...validate.errors.map(({ keyword, message }) => `${keyword} ${message}`)].join('\n\t')}`
         }),

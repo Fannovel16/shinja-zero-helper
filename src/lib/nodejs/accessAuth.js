@@ -20,7 +20,7 @@ export default function ({ request, url }, returnFormat) {
     const valid = validate({ authToken })
     if (!valid) return {
         result: false,
-        error: returnError[returnFormat].badRequest(validate)
+        error: returnError[returnFormat].failAjv(validate)
     }
     if (authToken != process.env.SECRET_PROVIDERS_TOKEN) return {
         result: false,
