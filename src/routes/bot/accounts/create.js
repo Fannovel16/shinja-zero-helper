@@ -25,12 +25,10 @@ const botAccountValidate = ajv.compile({
 })
 
 export async function POST({ url, request }) {
-    const siteName = url.searchParams.get("site")
     const authResult = accessAuth({ request, url }, "json")
     if (!authResult.result) return authResult.error
     try {
         const botAccountInfo = await request.json()
-        botAccountInfo.site = siteName
         if (!botAccountValidate(botAccountInfo)) return returnError.json.failAjv(botAccountValidate)
         const assignResult = assignCreator(botAccountInfo)
         if (!assignResult) return returnError.json.badEncBic()
@@ -41,7 +39,7 @@ export async function POST({ url, request }) {
                 data: Object.assign(botAccountInfo, {
                     name: botAccountInfo.name || botAccountInfo.username,
                     email: { connect: botAccountInfo.email },
-                    site: { connectOrCreate: { where: { name: siteName }, create: { name: siteName } } },
+                    site: { connectOrCreate: { where: { name: botAccountInfo.site }, create: { name: botAccountInfo.site } } },
                     createdAt,
                     usageDates: [createdAt]
                 }),
