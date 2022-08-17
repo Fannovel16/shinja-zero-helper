@@ -1,19 +1,19 @@
 import Ajv from 'ajv'
-import parseJson from './noErrorThrowJsonParser'
 import returnError from './returnError'
+import "dotenv/config"
 
 const validate = new Ajv().compile({
     type: "object",
     properties: {
         query: {
-            type: "object",
+            type: ["object", "null"],
             properties: { limit: false, page: false, take: false, skip: false },
             additionalProperties: true
         },
         limit: { type: "integer", minimum: 1, maximum: Number(process.env.MAX_QUERY_LIMIT) || 500 },
-        page: { type: "integer", minimum: 1 }
-    },
-    required: ["query", "limit", "page"]
+        page: { type: "integer", minimum: 1 },
+        select: { type: ["object", "null"], additionalProperties: true }
+    }
 })
 
 function getPaginationInfo({ limit, page }) {
@@ -23,20 +23,14 @@ function getPaginationInfo({ limit, page }) {
     }
 }
 
-export default async function (db, { query, limit, page }) {
-    const parseQueryRe = parseJson(query)
-    if (parseQueryRe.error) return returnError.json.jsonError(parseQueryRe.error)
-    const parsedParams = {
-        query: parseQueryRe.data || {},
-        limit: Number(limit) || process.env.DEFAULT_LIMIT || 200,
-        page: Number(page) || 1
-    }
-    const valid = validate(parsedParams)
+export default async function (db, { query, select, limit = 1, page = 1 }) {
+    const valid = validate({ query, select, limit, page })
     if (!valid) return returnError.json.failAjv(validate)
     try {
         return {
             status: 200,
-            body: await db.findMany({ where: parsedParams.query, ...getPaginationInfo(parsedParams) })
+            body: await db.findMany({ where: query || undefined, select: select || undefined, ...getPaginationInfo({ limit, page }) })
+            //Prisma coi null là ko hợp lệ, undefined tương đương với ko tồn tại
         }
     } catch (e) {
         if (!query) return returnError.json.internalError(e)

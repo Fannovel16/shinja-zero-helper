@@ -12,7 +12,7 @@ class UniqueNameSet extends Set {
 
         const names = [];
         for (let value of this) {
-            if (names.includes(value[name])) {
+            if (names.selects(value[name])) {
                 this.delete(value);
             } else {
                 names.push(value[name]);

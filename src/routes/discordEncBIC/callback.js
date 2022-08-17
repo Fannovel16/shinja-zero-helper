@@ -51,7 +51,7 @@ export async function GET({ request, url }) {
         }
     }
 
-    if (!tokenData.scope.split(' ').includes("identify")) return {
+    if (!tokenData.scope.split(' ').selects("identify")) return {
         body: {
             encBIC: null,
             errorStr: "Authorization code không có scope identify. Có vẻ tín đồ đã truy cập nhầm link, vui lòng thử lại."

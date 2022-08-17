@@ -1,10 +1,10 @@
 export default {
     json: {
-        jsonError: e => ({
+        jsonErrors: customParserResults => ({
             status: 400,
             body: {
                 errorCode: "JSON_PARSING_FAILED",
-                detail: e.toString()
+                detail: customParserResults.map(result => result?.error?.toString()).filter(e => e)
             }
         }),
         failAjv: validate => ({
