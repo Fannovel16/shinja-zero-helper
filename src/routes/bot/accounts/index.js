@@ -1,7 +1,7 @@
 import accessAuth from '$lib/nodejs/accessAuth'
 import handleCommonIndex from '$lib/nodejs/handleCommonIndex'
 import parseJson from '$lib/nodejs/noErrorThrowJsonParser'
-import returnError from '../../../lib/nodejs/returnError'
+import returnError from '$lib/nodejs/returnError'
 import db from './_db'
 import "dotenv/config"
 
@@ -11,7 +11,7 @@ export async function GET({ request, url }) {
 
     const [parseQueryRe, parseSelectRe] = [parseJson(url.searchParams.get("query")), parseJson(url.searchParams.get("select"))]
     if (parseQueryRe.error || parseSelectRe.error) return returnError.json.jsonErrors([parseQueryRe, parseSelectRe])
-    
+
     return await handleCommonIndex(db, {
         query: parseQueryRe.data,
         select: parseSelectRe.data,

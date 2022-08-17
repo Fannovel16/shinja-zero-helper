@@ -1,7 +1,7 @@
 import accessAuth from '$lib/nodejs/accessAuth'
 import handleCommonIndex from '$lib/nodejs/handleCommonIndex'
 import parseJson from '$lib/nodejs/noErrorThrowJsonParser'
-import returnError from '../../../lib/nodejs/returnError'
+import returnError from '$lib/nodejs/returnError'
 import db from './_db'
 import "dotenv/config"
 
